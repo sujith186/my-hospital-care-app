@@ -94,7 +94,7 @@
 
   <!-- Lay 7: Login (demo) -->
   <div id="lay7" class="screen">
-    <h2>Login (demo)</h2>
+    <h2>Login </h2>
     <form id="loginForm">
       <label>ID <input name="loginId" inputmode="numeric" pattern="\d*" required></label>
       <label>Password <input type="password" name="password" required></label>
@@ -189,6 +189,62 @@
   </div>
 </div>
 <script src="script.js"></script>
+<!-- Login/Register script -->
+<script>
+// Step 1: Handle Registration Save
+document.getElementById("regForm")?.addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const formData = new FormData(e.target);
+  const user = {
+    name: formData.get("name"),
+    role: formData.get("role"),
+    id: formData.get("id"),
+    age: formData.get("age"),
+    password: formData.get("password")
+  };
+
+  localStorage.setItem("mycareUser", JSON.stringify(user)); 
+  alert("Registration Successful! Please Login.");
+  showScreen("lay7");
+});
+
+document.getElementById("loginForm")?.addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const user = JSON.parse(localStorage.getItem("mycareUser"));
+  const enteredId = e.target.loginId.value;
+  const enteredPass = e.target.password.value;
+
+  if(user && user.id === enteredId && user.password === enteredPass){
+    localStorage.setItem("loggedIn", "true");  
+    alert("Login Successful!");
+    showScreen("lay4");
+  } else {
+    alert("Invalid ID or Password!");
+  }
+});
+
+function protectDashboard() {
+  if(localStorage.getItem("loggedIn") !== "true") {
+    showScreen("lay7");
+  }
+}
+
+document.getElementById("lay4")?.addEventListener("click", protectDashboard);
+
+document.getElementById("logoutBtn")?.addEventListener("click", function(){
+  localStorage.removeItem("loggedIn");
+  alert("Logged out successfully!");
+  showScreen("lay7");
+});
+
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(screen => screen.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+</script>
 
 </body>
 </html>
+
