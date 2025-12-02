@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MyCare</title>
+
+  <!-- Add this line here -->
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<!-- Simple multi-screen layout following your sketches (updated per your requests) -->
+<div id="app">
+  <!-- Lay 1: Welcome with SVG logo -->
+  <div id="lay1" class="screen active">
+    <div style="text-align:center">
+      <!-- SVG: two hands holding a heart (simple stylized) -->
+      <svg width="120" height="120" viewBox="0 0 64 64" aria-hidden="true">
+        <!-- hands (stylized) -->
+        <path d="M8 36c0 0 6-8 16-8s16 8 16 8" fill="#fff6f6" stroke="#e6a0a0" stroke-width="1"/>
+        <path d="M56 36c0 0-6-8-16-8S24 36 24 36" fill="#fff6f6" stroke="#e6a0a0" stroke-width="1"/>
+        <!-- heart -->
+        <path d="M32 24c3-3 8-2 11 1 3 3 3 8 0 11-3 3-8 8-11 10-3-2-8-7-11-10-3-3-3-8 0-11 3-3 8-4 11-1z"
+              fill="#ff6b6b" stroke="#c04242" stroke-width="0.5"/>
+      </svg>
+      <h1 class="logo">MyCare</h1>
+      <p>Welcome to MyCare </p>
+      <button class="btn" data-show="lay2">Get Started</button>
+    </div>
+  </div>
+
+  <!-- Lay 2: choose register / login (vertical) -->
+  <div id="lay2" class="screen">
+    <h2>Welcome</h2>
+    <div class="center-col">
+      <button class="btn" data-show="lay3">New Registration</button>
+      <button class="btn" data-show="lay7">Login </button>
+    </div>
+    <button class="link back" data-show="lay1">Back</button>
+  </div>
+
+  <!-- Lay 3: Registration (role select, password instead of address) -->
+  <div id="lay3" class="screen">
+    <h2>Register</h2>
+    <form id="regForm">
+      <label>Name <input name="name" required></label>
+      <label>Role
+        <select name="role" required>
+          <option value="">--Select--</option>
+          <option value="Doctor">Doctor</option>
+          <option value="Nurse">Nurse</option>
+        </select>
+      </label>
+      <label>ID <input name="id" inputmode="numeric" pattern="\d*" required></label>
+      <label>Age <input type="number" name="age" min="1" required></label>
+      <label>Password <input type="password" name="password" id="regPassword" required></label>
+      <label>Photo <input type="file" name="photo" id="regPhoto" accept="image/*"></label>
+      <div class="row">
+        <button type="submit" class="btn">Register</button>
+        <button type="button" class="btn outline" data-show="lay2">Cancel</button>
+      </div>
+      <p id="regHint" style="font-size:13px;color:var(--muted);margin-top:8px">
+        Password must be at least 8 characters and include lowercase, uppercase, number, and special character.
+      </p>
+    </form>
+  </div>
+
+  <!-- Lay 4: Dashboard / Main menu - removed logout from dashboard -->
+  <div id="lay4" class="screen">
+    <h2>Dashboard</h2>
+    <div class="menu-grid">
+      <div class="menu-card" data-show="lay5">Profile</div>
+      <div class="menu-card" data-show="lay8">Patient Data Upload</div>
+      <div class="menu-card" data-show="lay9">Bed Status</div>
+      <div class="menu-card" data-show="lay6">Shift Timings</div>
+      <div class="menu-card" data-show="lay12">Settings</div>
+    </div>
+  </div>
+
+  <!-- Lay 5: Profile (no address, show role) -->
+  <div id="lay5" class="screen">
+    <h2>Profile</h2>
+    <div id="profileCard" class="card">
+      <img id="profilePic" src="" alt="profile pic" style="display:none">
+      <p><strong id="profileName">Name: —</strong></p>
+      <p id="profileRole">Role: —</p>
+      <p id="profileId">ID: —</p>
+      <p id="profileAge">Age: —</p>
+    </div>
+    <div class="row">
+      <button class="btn" data-show="lay4">Back to Dashboard</button>
+      <button class="btn" id="editProfileBtn">Edit</button>
+    </div>
+  </div>
+
+  <!-- Lay 7: Login (demo) -->
+  <div id="lay7" class="screen">
+    <h2>Login (demo)</h2>
+    <form id="loginForm">
+      <label>ID <input name="loginId" inputmode="numeric" pattern="\d*" required></label>
+      <label>Password <input type="password" name="password" required></label>
+      <div class="row">
+        <button type="submit" class="btn">Login</button>
+        <button type="button" class="btn outline" data-show="lay2">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Lay 8: Patient Data Upload (age positive) -->
+  <div id="lay8" class="screen">
+    <h2>Patient Data Upload</h2>
+    <form id="patientForm">
+      <label>Name <input name="pName" required></label>
+      <label>Patient ID <input name="pId"></label>
+      <label>Mobile <input name="mobile"></label>
+      <label>Guardian Mobile <input name="gmobile"></label>
+      <label>Age <input type="number" name="page" min="1" required></label>
+      <label>Bed No <input name="bedNo"></label>
+      <label>Prescription (textarea) <textarea name="prescription"></textarea></label>
+      <label>Photo <input type="file" name="pPhoto" id="pPhoto" accept="image/*"></label>
+      <div class="row">
+        <button type="submit" class="btn">Submit</button>
+        <button type="button" class="btn outline" data-show="lay4">Cancel</button>
+      </div>
+    </form>
+    <div id="pPreview"></div>
+  </div>
+
+  <!-- Lay 9: Bed Status Grid -->
+  <div id="lay9" class="screen">
+    <h2>Bed Status</h2>
+    <div class="beds-grid" id="bedsGrid"></div>
+    <div class="row">
+      <button class="btn" data-show="lay4">Back</button>
+    </div>
+  </div>
+
+  <!-- Lay 10/11: Particular Bed detail (combined) -->
+  <div id="lay10" class="screen">
+    <h2>Bed Detail</h2>
+    <div id="bedDetail" class="card">
+      <p id="bd_bedno">Bed No: —</p>
+      <p id="bd_patient">Patient: —</p>
+      <p id="bd_id">Patient ID: —</p>
+      <p id="bd_age">Age: —</p>
+      <p id="bd_mobile">Mobile: —</p>
+      <p id="bd_presc">Prescription: —</p>
+    </div>
+    <div class="row">
+      <button class="btn" data-show="lay9">Back to Beds</button>
+    </div>
+  </div>
+
+  <!-- Lay 6: Shift Timings (now includes doctor and nurse names + change timing button) -->
+  <div id="lay6" class="screen">
+    <h2>Shift Timings</h2>
+    <table class="timings">
+      <thead><tr><th>Role</th><th>Name</th><th>Shift Start</th><th>Shift End</th></tr></thead>
+      <tbody id="shiftBody">
+        <!-- filled by JS -->
+      </tbody>
+    </table>
+
+    <div style="margin-top:10px">
+      <button class="btn" id="changeShiftBtn">Change Shift Timing</button>
+      <div id="changeShiftArea" style="display:none;margin-top:8px">
+        <label>Reason <textarea id="shiftReason" placeholder="Enter reason for shift change"></textarea></label>
+        <div class="row">
+          <button class="btn" id="saveShiftChange">Save</button>
+          <button class="btn outline" id="cancelShiftChange">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:12px">
+      <button class="btn" data-show="lay4">Back</button>
+    </div>
+  </div>
+
+  <!-- Lay 12: Settings with App Info as button and Logout here only -->
+  <div id="lay12" class="screen">
+    <h2>Settings</h2>
+    <ul style="padding-left:0;list-style:none">
+      <li style="margin:6px 0"><button class="btn outline" id="appInfoBtn">App Info</button></li>
+     
+     
+      <li style="margin:6px 0"><button class="btn" id="logoutBtn">Logout</button></li>
+    </ul>
+    <button class="btn" data-show="lay4">Back</button>
+  </div>
+</div>
+<script src="script.js"></script>
+
+</body>
+</html>
