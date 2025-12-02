@@ -6,10 +6,17 @@ document.addEventListener('click', function(e){
   }
 });
 function showLay(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  // Hide all screens
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  
+  // Show the requested screen
   const screen = document.getElementById(id);
   if(screen) screen.classList.add('active');
+
+  // Auto-protect dashboard
+  if(id === 'lay4') protectDashboard();
 }
+
 
 /* --- Registration validation and storage --- */
 const regForm = document.getElementById('regForm');
@@ -297,3 +304,4 @@ document.querySelectorAll('form').forEach(f=>f.addEventListener('keydown', funct
     // allow enter inside textarea, but for other inputs prevent accidental submit if needed
   }
 }));
+
